@@ -7,6 +7,7 @@ function ProductList({ onHomeClick }) {
   const [showCart, setShowCart] = useState(false);
   const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
   const dispatch = useDispatch(); // Get the dispatch function from Redux
+  const cartItems = useSelector((state) => state.cart.items); // Select cart items from Redux store
 
   const plantsArray = [
     {
@@ -287,7 +288,6 @@ function ProductList({ onHomeClick }) {
   };
 
   const handleContinueShopping = (e) => {
-    e.preventDefault();
     setShowCart(false);
   };
   const [addedToCart, setAddedToCart] = useState({});
@@ -329,7 +329,7 @@ function ProductList({ onHomeClick }) {
           <div>
             {" "}
             <a href="#" onClick={(e) => handleCartClick(e)} style={styleA}>
-              <h1 className="cart">
+              <h1 className="cart" style={{ position: "relative" }}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 256 256"
@@ -344,12 +344,28 @@ function ProductList({ onHomeClick }) {
                     d="M42.3,72H221.7l-26.4,92.4A15.9,15.9,0,0,1,179.9,176H84.1a15.9,15.9,0,0,1-15.4-11.6L32.5,37.8A8,8,0,0,0,24.8,32H8"
                     fill="none"
                     stroke="#faf9f9"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     id="mainIconPathAttribute"
                   ></path>
                 </svg>
+                {cartItems.length > 0 && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      background: "red",
+                      color: "white",
+                      borderRadius: "50%",
+                      padding: "4px 8px",
+                      fontSize: "14px",
+                    }}
+                  >
+                    {cartItems.length}
+                  </span>
+                )}
               </h1>
             </a>
           </div>
@@ -394,9 +410,21 @@ function ProductList({ onHomeClick }) {
                       {/* Display plant cost */}
                       <button
                         className="product-button"
-                        onClick={() => handleAddToCart(plant)} // Handle adding plant to cart
+                        onClick={() => handleAddToCart(plant)}
+                        disabled={addedToCart[plant.name]} // <-- Desactiva si ya fue añadido
+                        style={{
+                          backgroundColor: addedToCart[plant.name]
+                            ? "#ccc"
+                            : "#4CAF50",
+                          color: addedToCart[plant.name] ? "#000" : "#fff",
+                          cursor: addedToCart[plant.name]
+                            ? "default"
+                            : "pointer",
+                        }}
                       >
-                        Add to Cart
+                        {addedToCart[plant.name]
+                          ? "Added to Cart"
+                          : "Add to Cart"}
                       </button>
                     </div>
                   )
