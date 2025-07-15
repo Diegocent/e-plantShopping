@@ -7,15 +7,7 @@ function ProductList({ onHomeClick }) {
   const [showCart, setShowCart] = useState(false);
   const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
   const dispatch = useDispatch(); // Get the dispatch function from Redux
-  const handleAddToCart = (product) => {
-    dispatch(addItem(product)); // Dispatch the action to add the product to the cart (Redux action)
 
-    setAddedToCart((prevState) => ({
-      // Update the local state to reflect that the product has been added
-      ...prevState, // Spread the previous state to retain existing entries
-      [product.name]: true, // Set the current product's name as a key with value 'true' to mark it as added
-    }));
-  };
   const plantsArray = [
     {
       category: "Air Purifying Plants",
@@ -299,6 +291,16 @@ function ProductList({ onHomeClick }) {
     setShowCart(false);
   };
   const [addedToCart, setAddedToCart] = useState({});
+  const handleAddToCart = (product) => {
+    console.log("Adding product to cart:", product);
+    dispatch(addItem(product)); // Dispatch the action to add the product to the cart (Redux action)
+
+    setAddedToCart((prevState) => ({
+      // Update the local state to reflect that the product has been added
+      ...prevState, // Spread the previous state to retain existing entries
+      [product.name]: true, // Set the current product's name as a key with value 'true' to mark it as added
+    }));
+  };
 
   return (
     <div>
